@@ -36,6 +36,7 @@ public class BackendVerticle extends AbstractVerticle {
 
     private void servicesPost(RoutingContext routingContext) {
         routingContext.request().bodyHandler(buffer -> {
+            String string = buffer.toString();
             JsonObject json = new JsonObject(buffer.toString());
             serviceManager.addService(json.getString("name"), json.getString("url"));
             routingContext.response().setStatusCode(200).end();

@@ -8,6 +8,7 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.Subscription;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -26,19 +27,28 @@ class ServiceChecker {
 
     synchronized void scheduleServiceCheck(Service service) {
         Scheduler scheduler = RxHelper.scheduler(vertx);
-        Observable<Long> interval = Observable.interval(5, TimeUnit.SECONDS, scheduler);
+        Observable<Long> interval = Observable.interval(60, TimeUnit.SECONDS, scheduler);
         Subscription subscription = interval.subscribe(count -> {
-            HttpClientOptions clientOptions = new HttpClientOptions().setSsl(true).setTrustAll(true);
-            HttpClient client = vertx.createHttpClient(clientOptions);
-            client.getAbs(service.getUrl(), response -> {
-                if(response.statusCode() < 300) {
-                    service.setStatus("OK");
-                } else if (response.statusCode() < 400) {
-                    service.setStatus("OK (3XX)");
-                } else {
-                    service.setStatus("DOWN");
-                }
-            }).end();
+            try {
+                HttpClientOptions clientOptions = new HttpClientOptions().setSsl(true).setTrustAll(true);
+                HttpClient client = vertx.createHttpClient(clientOptions);
+                client.getAbs(service.getUrl(), response -> {
+                    service.setLastCheck(new Date());
+                    if (response.statusCode() < 300) {
+                        service.setStatus("OK");
+                    } else if (response.statusCode() < 400) {
+                        service.setStatus("OK (3XX)");
+                    } else {
+                        service.setStatus("DOWN");
+                    }
+                    service.notifyChange();
+                }).end();
+            } catch (Exception e) {
+                service.setLastCheck(new Date());
+                service.setStatus("INVALID");
+                service.notifyChange();
+            }
+
         });
         subscriptions.put(service.getId(), subscription);
     }

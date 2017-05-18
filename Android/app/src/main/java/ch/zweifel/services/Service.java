@@ -15,9 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Samuel Zweifel on 17.05.17.
@@ -30,13 +28,14 @@ public class Service {
     private String name;
     private String url;
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private String status;
+    private String status = "";
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(using=JsonDateSerializer.class)
     @JsonDeserialize(using=JsonDateDeserializer.class)
     private Date lastCheck;
+
     @JsonIgnore
-    private List<DataChangedObserver> dataChangedObservers = new ArrayList<>();
+    private int position;
 
     public Service() {
     }
@@ -79,24 +78,27 @@ public class Service {
             this.status = status;
     }
 
-    public void notifyChange() {
-        dataChanged();
-    }
-
     public Date getLastCheck() {
         return lastCheck;
+    }
+
+    public String getLastCheckString() {
+        if(lastCheck != null) {
+            return new SimpleDateFormat(DATE_PATTERN).format(lastCheck);
+        }
+        return "";
     }
 
     public void setLastCheck(Date date) {
         this.lastCheck = date;
     }
 
-    public void registerDataChangedObserver(DataChangedObserver dataChangedObserver) {
-        this.dataChangedObservers.add(dataChangedObserver);
+    public int getPosition() {
+        return position;
     }
 
-    private void dataChanged() {
-        dataChangedObservers.forEach(DataChangedObserver::dataChanged);
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public static class JsonDateSerializer extends JsonSerializer<Date> {
