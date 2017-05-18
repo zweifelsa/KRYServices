@@ -17,7 +17,9 @@ dependencies {
     compile "io.vertx:vertx-core:$version"
     compile "io.vertx:vertx-web:$version"
     compile "io.vertx:vertx-web-client:$version"
+    compile "io.vertx:vertx-rx-java:$version"
     testCompile "io.vertx:vertx-unit:$version"
+    testCompile 'junit:junit:4.12'
 }
 
 jar {

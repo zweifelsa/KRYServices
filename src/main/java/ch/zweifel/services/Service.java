@@ -1,5 +1,6 @@
 package ch.zweifel.services;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -14,10 +15,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Created by samuel on 17.05.17.
+ * Created by Samuel Zweifel on 17.05.17.
  */
 public class Service {
 
@@ -32,6 +35,8 @@ public class Service {
     @JsonSerialize(using=JsonDateSerializer.class)
     @JsonDeserialize(using=JsonDateDeserializer.class)
     private Date lastCheck;
+    @JsonIgnore
+    private List<DataChangedObserver> dataChangedObservers = new ArrayList<>();
 
     public Service() {
     }
@@ -71,7 +76,10 @@ public class Service {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        if(!status.equals(this.status)) {
+            this.status = status;
+            dataChanged();
+        }
     }
 
     public Date getLastCheck() {
@@ -80,6 +88,14 @@ public class Service {
 
     public void setLastCheck(Date date) {
         this.lastCheck = date;
+    }
+
+    public void registerDataChangedObserver(DataChangedObserver dataChangedObserver) {
+        this.dataChangedObservers.add(dataChangedObserver);
+    }
+
+    private void dataChanged() {
+        dataChangedObservers.forEach(DataChangedObserver::dataChanged);
     }
 
     public static class JsonDateSerializer extends JsonSerializer<Date> {
