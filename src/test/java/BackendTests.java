@@ -19,16 +19,13 @@ import org.junit.runner.RunWith;
 public class BackendTests {
     private static final String FILE = "./services.json";
     private static final String JSON = "{\n" +
-            "  \"services\":\n" +
-            "    [\n" +
-            "      {\n" +
-            "        \"id\": \"07a9953d-6604-4968-8bd1-df33a075980a\",\n" +
-            "        \"name\": \"test service\",\n" +
-            "        \"url\": \"https://kry.se\",\n" +
-            "        \"status\": \"OK\",\n" +
-            "        \"lastCheck\": \"2014-06-16 16:42\"\n" +
-            "      }\n" +
-            "    ]\n" +
+            "  \"services\" : [ {\n" +
+            "    \"id\" : \"07a9953d-6604-4968-8bd1-df33a075980a\",\n" +
+            "    \"name\" : \"test service\",\n" +
+            "    \"url\" : \"https://kry.se\",\n" +
+            "    \"status\" : \"OK\",\n" +
+            "    \"lastCheck\" : \"2014-06-16 16:42\"\n" +
+            "  } ]\n" +
             "}";
     private Vertx vertx;
 
@@ -47,7 +44,6 @@ public class BackendTests {
     @Test
     public void testServicesGet(TestContext context) throws Exception {
         Async async = context.async();
-
         HttpClient client = vertx.createHttpClient();
         client.getNow(1111, "localhost", "/services", response -> {
             response.bodyHandler(buffer -> {

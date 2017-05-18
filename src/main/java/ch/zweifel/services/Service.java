@@ -86,7 +86,7 @@ public class Service {
 
         @Override
         public void serialize(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-            new SimpleDateFormat(DATE_PATTERN).format(date);
+            gen.writeString(new SimpleDateFormat(DATE_PATTERN).format(date));
         }
     }
 
@@ -95,7 +95,7 @@ public class Service {
         @Override
         public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             try {
-                return new SimpleDateFormat(DATE_PATTERN).parse(p.getText());
+                return new SimpleDateFormat(DATE_PATTERN).parse(p.getValueAsString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }

@@ -62,6 +62,7 @@ public class ServiceManager {
     // synchronized
     private synchronized void loadFile() {
         Buffer buffer = vertx.fileSystem().readFileBlocking(FILE);
+        services.clear();
         new JsonObject(buffer.toString()).getJsonArray(SERVICES).forEach(object -> {
             if(object instanceof JsonObject) {
                 JsonObject json = (JsonObject) object;
