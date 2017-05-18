@@ -1,6 +1,5 @@
 package ch.zweifel.services;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -31,16 +30,16 @@ public class AddServiceDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.add_service_dialog, null);
         final EditText editName = (EditText) view.findViewById(R.id.addServiceName);
         final EditText editUrl = (EditText) view.findViewById(R.id.addServiceUrl);
-        builder.setTitle("Add Service");
+        builder.setTitle(R.string.add_service);
         builder.setView(view)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(listener != null) {
                             listener.addService(editName.getText().toString(), editUrl.getText().toString());
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }

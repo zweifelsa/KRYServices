@@ -1,3 +1,10 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="service_item_margin">12dp</dimen>
+    <dimen name="service_item_height">96dp</dimen>
+    <dimen name="service_delete_width">48dp</dimen>
+    <dimen name="service_title_size">24sp</dimen>
+    <dimen name="service_url_size">12sp</dimen>
+    <dimen name="service_status_size">20sp</dimen>
+    <dimen name="service_time_size">12sp</dimen>
 </resources>

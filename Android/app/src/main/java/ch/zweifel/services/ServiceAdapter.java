@@ -1,5 +1,6 @@
 package ch.zweifel.services;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ public class ServiceAdapter extends ClickableAdapter<ServiceAdapter.ViewHolder> 
         TextView url;
         TextView status;
         TextView lastCheck;
+        View serviceDelete;
+
         public ViewHolder(View itemView) {
             super(itemView);
             view = itemView;
@@ -35,6 +38,7 @@ public class ServiceAdapter extends ClickableAdapter<ServiceAdapter.ViewHolder> 
             status = (TextView) itemView.findViewById(R.id.service_status);
             marker = itemView.findViewById(R.id.service_marker);
             lastCheck = (TextView) itemView.findViewById(R.id.service_lastcheck);
+            serviceDelete = itemView.findViewById(R.id.service_delete);
         }
     }
 
@@ -46,15 +50,21 @@ public class ServiceAdapter extends ClickableAdapter<ServiceAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ServiceAdapter.ViewHolder holder, final int position) {
-        holder.view.setOnClickListener(this);
-        holder.name.setText(services.get(position).getName());
-        holder.url.setText(services.get(position).getUrl());
-        holder.status.setText(services.get(position).getStatus());
-        holder.lastCheck.setText(services.get(position).getLastCheckString());
-        if(services.get(position).getStatus().equals("OK")) {
+    public void onBindViewHolder(final ServiceAdapter.ViewHolder holder, final int position) {
+        holder.serviceDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceAdapter.this.onItemClick(position);
+            }
+        });
+        Service service = services.get(position);
+        holder.name.setText(service.getName());
+        holder.url.setText(service.getUrl());
+        holder.status.setText(service.getStatus());
+        holder.lastCheck.setText(service.getLastCheckString());
+        if(service.getStatus().equals(Service.STATUS_OK)) {
             holder.marker.setBackgroundResource(R.color.colorStatusOK);
-        } else if (services.get(position).getStatus().startsWith("OK")) {
+        } else if (services.get(position).getStatus().startsWith(Service.STATUS_OK)) {
             holder.marker.setBackgroundResource(R.color.colorStatus);
         } else {
             holder.marker.setBackgroundResource(R.color.colorStatusDownInvalid);

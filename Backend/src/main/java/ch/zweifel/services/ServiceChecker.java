@@ -35,17 +35,17 @@ class ServiceChecker {
                 client.getAbs(service.getUrl(), response -> {
                     service.setLastCheck(new Date());
                     if (response.statusCode() < 300) {
-                        service.setStatus("OK");
+                        service.setStatus(Service.STATUS_OK);
                     } else if (response.statusCode() < 400) {
-                        service.setStatus("OK (3XX)");
+                        service.setStatus(Service.STATUS_OK_X);
                     } else {
-                        service.setStatus("DOWN");
+                        service.setStatus(Service.STATUS_DOWN);
                     }
                     service.notifyChange();
                 }).end();
             } catch (Exception e) {
                 service.setLastCheck(new Date());
-                service.setStatus("INVALID");
+                service.setStatus(Service.STATUS_INVALID);
                 service.notifyChange();
             }
 

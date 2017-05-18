@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/service_item_height"
     android:clickable="true"
     android:focusable="true"
     android:background="?selectableItemBackground"
@@ -10,26 +10,46 @@
 
     <View
         android:id="@+id/service_marker"
-        android:layout_width="15dp"
-        android:layout_height="match_parent" />
+        android:layout_width="@dimen/service_item_margin"
+        android:layout_height="wrap_content"
+        tools:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/service_delete"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/service_item_margin"
+        android:layout_width="@dimen/service_delete_width"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:tint="@color/colorPrimaryDark"
+        android:src="@drawable/ic_delete_black"/>
 
     <LinearLayout
+        android:layout_toRightOf="@id/service_marker"
+        android:layout_toLeftOf="@+id/service_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="15dp"
+        android:paddingStart="@dimen/service_item_margin"
+        android:paddingTop="@dimen/service_item_margin"
         >
     <TextView
         android:id="@+id/service_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="@dimen/service_title_size"
         tools:text="Name" />
 
     <TextView
         android:id="@+id/service_url"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:textSize="@dimen/service_url_size"
         tools:text="https://key.se" />
 
     <LinearLayout
@@ -40,7 +60,7 @@
             android:id="@+id/service_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/service_status_size"
             android:minEms="5"
             tools:text="OK" />
 
@@ -48,9 +68,10 @@
             android:id="@+id/service_lastcheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/service_time_size"
             android:minEms="15"
             tools:text="2017-05-18 21:39"/>
     </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

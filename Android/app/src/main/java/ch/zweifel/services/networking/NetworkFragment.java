@@ -41,8 +41,9 @@ import ch.zweifel.services.Service;
  */
 public class NetworkFragment extends Fragment {
     public static final String TAG = "NetworkFragment";
-
-    private static final String URL_KEY = "UrlKey";
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_POST = "POST";
+    public static final String METHOD_DELETE = "DELETE";
 
     private RequestCallback callback;
     private NetworkTask networkTask;
@@ -61,8 +62,6 @@ public class NetworkFragment extends Fragment {
                 .findFragmentByTag(NetworkFragment.TAG);
         if (networkFragment == null) {
             networkFragment = new NetworkFragment();
-            Bundle args = new Bundle();
-            networkFragment.setArguments(args);
             fragmentManager.beginTransaction().add(networkFragment, TAG).commit();
         }
         return networkFragment;
@@ -79,7 +78,7 @@ public class NetworkFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         // Host Activity will handle callbacks from task.
-        callback = (RequestCallback)context;
+        callback = (RequestCallback) context;
     }
 
     @Override
@@ -128,9 +127,11 @@ public class NetworkFragment extends Fragment {
     private class NetworkTask extends AsyncTask<Void, Integer, NetworkTask.Result> {
 
         private ServiceRequest request;
+
         private NetworkTask(ServiceRequest request) {
             this.request = request;
         }
+
         /**
          * Wrapper class that serves as a union of a result value and an exception. When the
          * download task has completed, either the result value or exception can be a non-null
@@ -140,9 +141,11 @@ public class NetworkFragment extends Fragment {
         class Result {
             String resultValue;
             Exception exception;
+
             Result(String resultValue) {
                 this.resultValue = resultValue;
             }
+
             Result(Exception exception) {
                 this.exception = exception;
             }
@@ -170,21 +173,21 @@ public class NetworkFragment extends Fragment {
          */
         @Override
         protected Result doInBackground(Void... args) {
-            Result result = null;
-                String urlString = request.getUrl();
-                String methodString = request.getMethod();
-                String bodyString = request.getBodyAsString();
-                try {
-                    URL url = new URL(urlString);
-                    String resultString = request(url, methodString, bodyString);
-                    if (resultString != null) {
-                        result = new Result(resultString);
-                    } else {
-                        throw new IOException("No response received.");
-                    }
-                } catch(Exception e) {
-                    result = new Result(e);
+            Result result;
+            String urlString = request.getUrl();
+            String methodString = request.getMethod();
+            String bodyString = request.getBodyAsString();
+            try {
+                URL url = new URL(urlString);
+                String resultString = request(url, methodString, bodyString);
+                if (resultString != null) {
+                    result = new Result(resultString);
+                } else {
+                    throw new IOException("No response received.");
                 }
+            } catch (Exception e) {
+                result = new Result(e);
+            }
             return result;
         }
 
@@ -240,13 +243,13 @@ public class NetworkFragment extends Fragment {
                 connection.setRequestMethod(methodString);
                 // Already true by default but setting just in case; needs to be true since this request
                 // is carrying an input (response) body.
-                if(methodString.equals("GET")){
+                if (methodString.equals(METHOD_GET)) {
                     connection.setDoInput(true);
                 }
                 byte[] outputInBytes = null;
-                if(body != null && !body.isEmpty()) {
+                if (body != null && !body.isEmpty()) {
                     connection.setDoOutput(true);
-                    connection.setRequestProperty("Content-Type","application/json");
+                    connection.setRequestProperty("Content-Type", "application/json");
                     outputInBytes = body.getBytes("UTF-8");
                     connection.setFixedLengthStreamingMode(outputInBytes.length);
                 }
@@ -254,7 +257,7 @@ public class NetworkFragment extends Fragment {
                 connection.connect();
                 publishProgress(RequestCallback.Progress.CONNECT_SUCCESS);
 
-                if(outputInBytes != null && connection.getDoOutput()) {
+                if (outputInBytes != null && connection.getDoOutput()) {
                     OutputStream os = connection.getOutputStream();
                     os.write(outputInBytes);
                     os.close();
@@ -264,7 +267,7 @@ public class NetworkFragment extends Fragment {
                 if (responseCode >= 400) {
                     throw new IOException("HTTP error code: " + responseCode);
                 }
-                if(connection.getDoInput()) {
+                if (connection.getDoInput()) {
                     // Retrieve the response body as an InputStream.
                     stream = connection.getInputStream();
                     publishProgress(RequestCallback.Progress.GET_INPUT_STREAM_SUCCESS, 0);

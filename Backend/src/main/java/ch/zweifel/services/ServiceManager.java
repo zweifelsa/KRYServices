@@ -49,7 +49,6 @@ public class ServiceManager implements DataChangedObserver {
     }
 
     public void addService(String name, String url) {
-        //TODO duplicates?
         String id = UUID.randomUUID().toString();
         Service service = new Service(id, name, url);
         services.put(id, service);
@@ -63,7 +62,6 @@ public class ServiceManager implements DataChangedObserver {
         writeToFile();
     }
 
-    // synchronized
     private synchronized void loadFile() {
         Buffer buffer = vertx.fileSystem().readFileBlocking(FILE);
         services.clear();
@@ -78,7 +76,6 @@ public class ServiceManager implements DataChangedObserver {
         scheduleCheckers();
     }
 
-    // synchronized
     private synchronized void writeToFile() {
         JsonArray jsonList = new JsonArray();
         for(Service service: services.values()) {

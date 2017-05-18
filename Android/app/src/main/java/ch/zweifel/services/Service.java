@@ -22,6 +22,11 @@ import java.util.Date;
  */
 public class Service {
 
+    public static final String STATUS_OK = "OK";
+    public static final String STATUS_OK_X = "OK (3XX)";
+    public static final String STATUS_INVALID = "INVALID";
+    public static final String STATUS_DOWN = "DOWN";
+
     private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
 
     private String id;

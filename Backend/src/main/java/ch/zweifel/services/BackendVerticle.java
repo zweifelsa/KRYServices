@@ -12,7 +12,9 @@ import io.vertx.ext.web.RoutingContext;
 public class BackendVerticle extends AbstractVerticle {
 
     private static final String PATH_SERVICES = "/services";
-
+    private static final int PORT = 1111;
+    private static final String KEY_NAME = "name";
+    private static final String KEY_URL = "url";
     private ServiceManager serviceManager;
 
     @Override
@@ -27,7 +29,7 @@ public class BackendVerticle extends AbstractVerticle {
         router.post(PATH_SERVICES).handler(this::servicesPost);
         router.delete(PATH_SERVICES + "/:id").handler(this::servicesDelete);
 
-        server.requestHandler(router::accept).listen(1111);
+        server.requestHandler(router::accept).listen(PORT);
     }
 
     private void servicesGet(RoutingContext routingContext) {
@@ -36,9 +38,8 @@ public class BackendVerticle extends AbstractVerticle {
 
     private void servicesPost(RoutingContext routingContext) {
         routingContext.request().bodyHandler(buffer -> {
-            String string = buffer.toString();
             JsonObject json = new JsonObject(buffer.toString());
-            serviceManager.addService(json.getString("name"), json.getString("url"));
+            serviceManager.addService(json.getString(KEY_NAME), json.getString(KEY_URL));
             routingContext.response().setStatusCode(200).end();
         });
     }

@@ -27,7 +27,7 @@ public class ServiceRequest {
         }
 
         public String getUrl() {
-            return URL + ((method.equals("DELETE")) ? service.getId(): "");
+            return URL + ((method.equals(NetworkFragment.METHOD_DELETE)) ? service.getId(): "");
         }
 
         public String getMethod() {

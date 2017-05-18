@@ -9,8 +9,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_margin="15dp"
-        android:inputType="text"
-        android:hint="Name" />
+        android:inputType="textCapSentences"
+        android:hint="@string/name" />
 
     <EditText
         android:id="@+id/addServiceUrl"
@@ -19,5 +19,5 @@
         android:ems="10"
         android:layout_margin="15dp"
         android:inputType="textUri"
-        android:hint="Url" />
+        android:hint="@string/url" />
 </LinearLayout>

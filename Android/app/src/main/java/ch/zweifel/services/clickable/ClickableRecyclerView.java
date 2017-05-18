@@ -4,20 +4,14 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.View;
 
 /**
- * Created by samuel on 18.05.17.
+ * Created by Samuel Zweifel on 18.05.17.
  */
 
-public class ClickableRecyclerView extends RecyclerView implements View.OnClickListener {
+public class ClickableRecyclerView extends RecyclerView {
 
-    private OnItemClickListener longClickListener;
-
-    @Override
-    public void onClick(View v) {
-        longClickListener.onItemClick(getChildLayoutPosition(v));
-    }
+    private OnItemClickListener itemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -36,16 +30,20 @@ public class ClickableRecyclerView extends RecyclerView implements View.OnClickL
     }
 
     public void setOnItemLongClickListener(OnItemClickListener listener) {
-        longClickListener = listener;
+        itemClickListener = listener;
+        setAdapterOnItemClickListener();
     }
 
     @Override
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);
+        setAdapterOnItemClickListener();
+    }
 
+    private void setAdapterOnItemClickListener() {
+        Adapter adapter = getAdapter();
         if(adapter instanceof ClickableAdapter) {
-            ((ClickableAdapter) adapter).setOnItemClickListener(this);
+            ((ClickableAdapter) adapter).setOnItemClickListener(itemClickListener);
         }
-
     }
 }

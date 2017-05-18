@@ -26,6 +26,7 @@ import ch.zweifel.services.networking.RequestCallback;
 import ch.zweifel.services.networking.ServiceRequest;
 
 public class MainActivity extends AppCompatActivity implements RequestCallback, AddServiceDialogFragment.AddServiceListener {
+    private static final String JSON_ROOT = "services";
 
     private ClickableRecyclerView serviceList;
     private SwipeRefreshLayout swipeContainer;
@@ -67,14 +68,14 @@ public class MainActivity extends AppCompatActivity implements RequestCallback, 
                 if (adapter != null) {
                     final Service service = adapter.getItem(position);
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                    dialogBuilder.setTitle("Delete Service?")
-                            .setMessage("Are you sure you want to delete the service: " + service.getName());
-                    dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    dialogBuilder.setTitle(service.getName())
+                            .setMessage(R.string.delete_service_message);
+                    dialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             removeService(service, position);
                         }
-                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //do nothing
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements RequestCallback, 
     private void fetchServices() {
         if (!downloading && networkFragment != null) {
             // Execute the async download.
-            networkFragment.startRequest("GET");
+            networkFragment.startRequest(NetworkFragment.METHOD_GET);
             downloading = true;
             swipeContainer.setRefreshing(true);
         }
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements RequestCallback, 
         Service service = new Service();
         service.setName(name);
         service.setUrl(url);
-        networkFragment.startRequest(service, "POST");
+        networkFragment.startRequest(service, NetworkFragment.METHOD_POST);
         if (adapter != null) {
             adapter.addService(service);
         }
@@ -116,18 +117,18 @@ public class MainActivity extends AppCompatActivity implements RequestCallback, 
         if (adapter != null) {
             adapter.removeAt(position);
         }
-        networkFragment.startRequest(service, "DELETE");
+        networkFragment.startRequest(service, NetworkFragment.METHOD_DELETE);
     }
 
     @Override
     public void onSuccess(ServiceRequest request, String result) {
-        if (request.getMethod().equals("GET")) {
+        if (request.getMethod().equals(NetworkFragment.METHOD_GET)) {
             // Update your UI here based on result of download.
             swipeContainer.setRefreshing(false);
             downloading = false;
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Service[] services = mapper.readerFor(Service[].class).withRootName("services").readValue(result);
+                Service[] services = mapper.readerFor(Service[].class).withRootName(JSON_ROOT).readValue(result);
                 if (adapter != null) {
                     adapter.addAll(services);
                 }
@@ -140,16 +141,16 @@ public class MainActivity extends AppCompatActivity implements RequestCallback, 
     @Override
     public void onFail(ServiceRequest request, String message) {
         switch (request.getMethod()) {
-            case "GET":
+            case NetworkFragment.METHOD_GET:
                 swipeContainer.setRefreshing(false);
                 downloading = false;
                 break;
-            case "POST":
+            case NetworkFragment.METHOD_POST:
                 if (adapter != null) {
                     adapter.removeAt(request.getService().getPosition());
                 }
                 break;
-            case "DELETE":
+            case NetworkFragment.METHOD_DELETE:
                 if (adapter != null) {
                     adapter.insertAt(request.getService().getPosition(), request.getService());
                 }
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements RequestCallback, 
     @Override
     public void onProgressUpdate(int progressCode, int percentComplete) {
         switch (progressCode) {
-            // You can add UI behavior for progress updates here.
+            // not used
             case Progress.ERROR:
                 break;
             case Progress.CONNECT_SUCCESS:

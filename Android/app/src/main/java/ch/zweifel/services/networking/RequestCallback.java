@@ -17,8 +17,6 @@
 package ch.zweifel.services.networking;
 import android.net.NetworkInfo;
 
-import ch.zweifel.services.Service;
-
 /**
  * Sample interface containing bare minimum methods needed for an asynchronous task
  * to update the UI Context.
