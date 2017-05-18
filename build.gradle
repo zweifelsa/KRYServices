@@ -1,0 +1,35 @@
+group 'ch.zweifel.services'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+version = '3.4.1'
+sourceCompatibility = '1.8'
+mainClassName = 'io.vertx.core.Launcher'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile "io.vertx:vertx-core:$version"
+    compile "io.vertx:vertx-web:$version"
+    compile "io.vertx:vertx-web-client:$version"
+    testCompile "io.vertx:vertx-unit:$version"
+}
+
+jar {
+    // by default fat jar
+    archiveName = 'services-backend.jar'
+    from { configurations
+            .compile
+            .collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes 'Main-Class': 'io.vertx.core.Launcher'
+        attributes 'Main-Verticle':
+                'ch.zweifel.services.BackendVerticle'
+    }
+}
