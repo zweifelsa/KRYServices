@@ -24,9 +24,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/service_item_margin"
         android:layout_width="@dimen/service_delete_width"
+        android:padding="6dp"
         android:layout_height="match_parent"
         android:scaleType="centerInside"
-        android:tint="@color/colorPrimaryDark"
+        android:tint="@color/colorStatusDownInvalid"
         android:src="@drawable/ic_delete_black"/>
 
     <LinearLayout
