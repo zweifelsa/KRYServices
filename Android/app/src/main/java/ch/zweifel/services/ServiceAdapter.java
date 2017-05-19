@@ -62,12 +62,16 @@ public class ServiceAdapter extends ClickableAdapter<ServiceAdapter.ViewHolder> 
         holder.url.setText(service.getUrl());
         holder.status.setText(service.getStatus());
         holder.lastCheck.setText(service.getLastCheckString());
-        if(service.getStatus().equals(Service.STATUS_OK)) {
-            holder.marker.setBackgroundResource(R.color.colorStatusOK);
-        } else if (services.get(position).getStatus().startsWith(Service.STATUS_OK)) {
-            holder.marker.setBackgroundResource(R.color.colorStatus);
+        if(service.getStatus() != null && !service.getStatus().isEmpty()) {
+            if (service.getStatus().equals(Service.STATUS_OK)) {
+                holder.marker.setBackgroundResource(R.color.colorStatusOK);
+            } else if (services.get(position).getStatus().startsWith(Service.STATUS_OK)) {
+                holder.marker.setBackgroundResource(R.color.colorStatus);
+            } else {
+                holder.marker.setBackgroundResource(R.color.colorStatusDownInvalid);
+            }
         } else {
-            holder.marker.setBackgroundResource(R.color.colorStatusDownInvalid);
+            holder.marker.setBackgroundResource(R.color.colorStatusUndefined);
         }
     }
 

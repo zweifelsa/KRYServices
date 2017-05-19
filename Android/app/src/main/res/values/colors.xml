@@ -6,4 +6,5 @@
     <color name="colorStatusOK">#5cb85c</color>
     <color name="colorStatus">#f0ad4e</color>
     <color name="colorStatusDownInvalid">#d9534f</color>
+    <color name="colorStatusUndefined">#3c242c31</color>
 </resources>
