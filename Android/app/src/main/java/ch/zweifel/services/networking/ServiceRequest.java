@@ -3,7 +3,7 @@ package ch.zweifel.services.networking;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.zweifel.services.Service;
+import ch.zweifel.services.model.Service;
 
 /**
  * Created by samuel on 18.05.17.

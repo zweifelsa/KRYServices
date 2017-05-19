@@ -1,6 +1,5 @@
 package ch.zweifel.services;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.zweifel.services.clickable.ClickableAdapter;
+import ch.zweifel.services.model.Service;
 
 /**
  * Created by samuel on 18.05.17.

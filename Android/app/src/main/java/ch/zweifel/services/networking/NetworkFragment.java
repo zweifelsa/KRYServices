@@ -32,9 +32,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import ch.zweifel.services.Service;
+import ch.zweifel.services.model.Service;
 
 /**
  * Implementation of headless Fragment that runs an AsyncTask to fetch data from the network.

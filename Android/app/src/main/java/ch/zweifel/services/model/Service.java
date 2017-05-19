@@ -1,4 +1,4 @@
-package ch.zweifel.services;
+package ch.zweifel.services.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

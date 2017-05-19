@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 import ch.zweifel.services.clickable.ClickableRecyclerView;
+import ch.zweifel.services.model.Service;
 import ch.zweifel.services.networking.NetworkFragment;
 import ch.zweifel.services.networking.RequestCallback;
 import ch.zweifel.services.networking.ServiceRequest;
